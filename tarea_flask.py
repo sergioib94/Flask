@@ -34,4 +34,4 @@ def info_libros (codigo):
 		abort(404)
 	return render_template("libros.html",titulo=titulo,autor=autor)
 
-app.run('0.0.0.0',5000, debug=True)
+app.run(debug=True)
