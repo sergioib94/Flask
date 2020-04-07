@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def inicio():
-	return render_template("inicio.html",methods=["GET","POST"])
+	return render_template("inicio.html")
 
 @app.route('/potencia/<int:base>/<int:exponente>')
 def calc_potencia (base,exponente):
@@ -23,5 +23,15 @@ def cuenta_letra (palabra,letra):
 	else:
 		abort(404)
 	return render_template("contar.html",palabra=palabra,letra=letra,apariciones=cont)
+
+@app.route('/libro/<int:codigo>')
+def info_libros (codigo):
+	doc = etree.parse('libros.xml')
+	if str(codigo) in doc.xpath('/biblioteca/libro/codigo/text()'):
+		autor=doc.xpath('/biblioteca/libro[codigo/text()="%s"]/autor/text()' %codigo)[0]
+		titulo=doc.xpath('/biblioteca/libro[codigo/text()="%s"]/titulo/text()' %codigo)[0]
+	else:
+		abort(404)
+	return render_template("libros.html",titulo=titulo,autor=autor)
 
 app.run('0.0.0.0',5000, debug=True)
